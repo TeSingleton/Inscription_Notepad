@@ -4,7 +4,8 @@
   "description": "A simple note taking app to keep track of task that require attention",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/TeSingleton/Inscription_Notepad/issues"
   },
-  "homepage": "https://github.com/TeSingleton/Inscription_Notepad#readme"
+  "homepage": "https://github.com/TeSingleton/Inscription_Notepad#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
