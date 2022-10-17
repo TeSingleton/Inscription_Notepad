@@ -1,50 +1,107 @@
-// require express
-const express = require("express");
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+var storedNotes = require('./db/db.json');
 
-//  import routes
-const htmlRoutes = require("./Routes/htmlRoutes");
-const apiRoutes = require("./Routes/apiRoutes");
-
-// inititalize a path variable
-const path = require("path");
-// initialize `app` with the value of express
 const app = express();
-
-// create a port
+// PORT variable with the node env variable 
 const PORT = process.env.PORT || 3001;
 
-// require `fs` (file system module)
-
-// create middleware for parsing json
-
-// express.json parses JSON , used tp recognize the incoming Request object as a JSON onbject
+// Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
-
-// express.urlencoded is a method built in to express to recognize the incoming Request Obj as Strings or Arrays
-// extended set to true , allowing the request to return in any data type , not just string or an array
 app.use(express.urlencoded({ extended: true }));
 
-// express.static serves static files from the `public` directory(i.e.: HTML CSS and JS files from the public folder )
-app.use(express.static("public"));
+// using the static files from the public folder
+app.use(express.static('public'));
 
+// GET route for homepage
+app.get('/', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/index.html'))
+);
 
-app.use('/api', apiRoutes);
-
-app.use('/', htmlRoutes);
-
-app.use((req, res) => {
-    res.status(404).end();
+// GET route for /notes URL
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/notes.html'));
 });
-// GET  route for homepage
-// GET  route for notes URL
 
-// GET request for retrieving previously stored notes
+// GET request for grabbing stored notes
+app.get('/api/notes', (req, res) => {
+    res.json(storedNotes);
+});
 
-// POST request to add note
+// POST request to add new note
+app.post('/api/notes', (req, res) => {
+    // console.info(`${req.method} request received to add a new note.`);
+// destructured note object as a variable
+    const {title, text} = req.body
+    if (title && text) {
+        const newNote = {
+            title,
+            text,
+            // using the identifier function within the newNote object
+            id: uuidv4()
+        };
+
+        // pushing to newNote Array
+        storedNotes.push(newNote);
+
+        
+        fs.writeFile(`./db/db.json`, JSON.stringify(storedNotes, null, 2), (err) =>
+        err
+          ? console.error(err)
+          : console.log(
+              `Note titled "${newNote.title}" has been written to JSON file`
+            )
+      );
+  
+      const response = {
+        status: 'success',
+        body: newNote,
+      };
+  
+      console.log(response);
+      res.status(201).json(response);
+    } else {
+      res.status(500).json('Error in posting note');
+    }
+});
 
 // DELETE request to delete note
+app.delete('/api/notes/:id', (req, res) => {
+    console.info(`${req.method} request received to delete a note.`);
+    
+    const id = req.params.id;
+    if (id) {
 
-// start server and listen to PORT
-app.listen(PORT, () => {
-    console.log(`Server is listening on PORT ${PORT}`);
+        storedNotes = storedNotes.filter(item => item.id !== id);
+        
+        fs.writeFile(`./db/db.json`, JSON.stringify(storedNotes, null, 2), (err) =>
+        err
+          ? console.error(err)
+          : console.log(
+              `Note with id ${id} has been deleted from JSON file`
+            )
+      );
+  
+      const response = {
+        status: 'success',
+        id: id
+      };
+  
+      console.log(response);
+      res.status(201).json(response);
+    } else {
+        res.status(500).json('Error in deleting note');
+    }
 });
+
+// GET route for homepage
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/index.html'))
+);
+
+// Listen to PORT 
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} `)
+);
