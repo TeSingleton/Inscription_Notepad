@@ -3,6 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 var storedNotes = require('./db/db.json');
+const { Server } = require('http');
+const { prototype } = require('events');
 
 const app = express();
 // PORT variable with the node env variable 
@@ -32,7 +34,7 @@ app.get('/api/notes', (req, res) => {
 
 // POST request to add new note
 app.post('/api/notes', (req, res) => {
-    // console.info(`${req.method} request received to add a new note.`);
+    console.info(`${req.method} request received to add a new note.`);
 // destructured note object as a variable
     const {title, text} = req.body
     if (title && text) {
@@ -105,3 +107,7 @@ app.get('*', (req, res) =>
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} `)
 );
+
+Server.listen(PORT,()=>{
+    console.log(`app is running on  ${PORT}`);
+})
