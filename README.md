@@ -39,9 +39,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
      All work is welcome . Please create an issue for any big changes
 
-  ## Tests
+  ## Screenshot 
 
-    
+    ![Screen Shot 2022-10-17 at 6 16 01 PM](https://user-images.githubusercontent.com/104960721/196312501-47fb6f19-b319-40d6-b97c-62096e6e660b.png)
+
+  ## Deployed App
+       
+       https://inscriptionnote-app.herokuapp.com
 
   ## Questions?
 
