@@ -53,7 +53,7 @@ app.post('/api/notes', (req, res) => {
         err
           ? console.error(err)
           : console.log(
-              `Note titled "${newNote.title}" has been written to JSON file`
+              `"${newNote.title}" has been added to JSON file`
             )
       );
   
@@ -65,7 +65,7 @@ app.post('/api/notes', (req, res) => {
       console.log(response);
       res.status(201).json(response);
     } else {
-      res.status(500).json('Error in posting note');
+      res.status(500).json('Error in writing note');
     }
 });
 
@@ -108,6 +108,7 @@ app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} `)
 );
 
+// troubleshooting heroku
 // Server.listen(PORT,()=>{
 //     console.log(`app is running on  ${PORT}`);
 // })
