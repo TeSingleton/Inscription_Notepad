@@ -6,7 +6,7 @@
 
 ## Description
 
-    A note Taking app built using express.js for the back end .
+    A Note-taking app built using express.js for the back end .
 
 ## Table of Contents (clickable)
      
